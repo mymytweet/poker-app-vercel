@@ -32,11 +32,11 @@
                     </div>
                     <div class="col-md-3 col-6">
                         <h5>総収支</h5>
-                        <p class="fs-4 fw-bold {{ 'text-success' if summary.total_profit > 0 else 'text-danger' }}">${{ "{:,}".format(summary.total_profit) }}</p>
+                        <p class="fs-4 fw-bold {{ 'text-success' if summary.total_profit > 0 else 'text-danger' }}">￥{{ "{:,}".format(summary.total_profit) }}</p>
                     </div>
                     <div class="col-md-3 col-6">
                         <h5>総投資</h5>
-                        <p class="fs-5">${{ "{:,}".format(summary.total_buy_in) }}</p>
+                        <p class="fs-5">￥{{ "{:,}".format(summary.total_buy_in) }}</p>
                     </div>
                     <div class="col-md-3 col-6">
                         <h5>参加回数</h5>
@@ -56,11 +56,11 @@
                             <input type="text" class="form-control" id="event_name" name="event_name" required>
                         </div>
                         <div class="col-md-3">
-                            <label for="buy_in" class="form-label">バイイン ($)</label>
+                            <label for="buy_in" class="form-label">バイイン (￥)</label>
                             <input type="number" class="form-control" id="buy_in" name="buy_in" required>
                         </div>
                         <div class="col-md-3">
-                            <label for="prize" class="form-label">賞金 ($)</label>
+                            <label for="prize" class="form-label">賞金 (￥)</label>
                             <input type="number" class="form-control" id="prize" name="prize" value="0" required>
                         </div>
                         <div class="col-12">
@@ -93,10 +93,10 @@
                     <tr>
                         <td>{{ record.日付 }}</td>
                         <td>{{ record.イベント名 }}</td>
-                        <td>${{ "{:,}".format(record.バイイン | int(0)) }}</td>
-                        <td>${{ "{:,}".format(record.賞金 | int(0)) }}</td>
+                        <td>￥{{ "{:,}".format(record.バイイン | int(0)) }}</td>
+                        <td>￥{{ "{:,}".format(record.賞金 | int(0)) }}</td>
                         <td class="{{ 'text-success' if (record.収支 | int(0)) > 0 else 'text-danger' }}">
-                            ${{ "{:,}".format(record.収支 | int(0)) }}
+                            ￥{{ "{:,}".format(record.収支 | int(0)) }}
                         </td>
                         <td>{{ record.メモ }}</td>
                         <td>

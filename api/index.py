@@ -4,7 +4,7 @@ from datetime import datetime
 import gspread
 from flask import Flask, render_template, request, redirect, url_for, flash
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='../templates')
 app.secret_key = os.urandom(24)
 
 # --- Google Spreadsheetの設定 (Vercel環境変数対応) ---

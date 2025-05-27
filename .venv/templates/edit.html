@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>記録の編集</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">📝 記録の編集 ({{ row_num }}行目)</h1>
+
+        <div class="card">
+            <div class="card-body">
+                <form action="{{ url_for('update_record', row_id=row_num) }}" method="post">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="date" class="form-label">日付</label>
+                            <input type="text" class="form-control" id="date" name="date" value="{{ record.日付 }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="event_name" class="form-label">イベント名</label>
+                            <input type="text" class="form-control" id="event_name" name="event_name" value="{{ record.イベント名 }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="buy_in" class="form-label">バイイン ($)</label>
+                            <input type="number" class="form-control" id="buy_in" name="buy_in" value="{{ record.バイイン }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="prize" class="form-label">賞金 ($)</label>
+                            <input type="number" class="form-control" id="prize" name="prize" value="{{ record.賞金 }}" required>
+                        </div>
+                        <div class="col-12">
+                            <label for="memo" class="form-label">メモ</label>
+                            <input type="text" class="form-control" id="memo" name="memo" value="{{ record.メモ }}">
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary">更新する</button>
+                            <a href="{{ url_for('index') }}" class="btn btn-secondary">キャンセル</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

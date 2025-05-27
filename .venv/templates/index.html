@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ポーカー収支表</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">🃏 ポーカー収支表</h1>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <div class="card mb-4">
+            <div class="card-header">サマリー</div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-md-3 col-6">
+                        <h5>ROI</h5>
+                        <p class="fs-4 fw-bold {{ 'text-success' if summary.roi > 0 else 'text-danger' }}">{{ "%.2f"|format(summary.roi) }}%</p>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <h5>総収支</h5>
+                        <p class="fs-4 fw-bold {{ 'text-success' if summary.total_profit > 0 else 'text-danger' }}">${{ "{:,}".format(summary.total_profit) }}</p>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <h5>総投資</h5>
+                        <p class="fs-5">${{ "{:,}".format(summary.total_buy_in) }}</p>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <h5>参加回数</h5>
+                        <p class="fs-5">{{ summary.entry_count }}回</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">新しい記録を追加</div>
+            <div class="card-body">
+                <form action="/add" method="post">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="event_name" class="form-label">イベント名</label>
+                            <input type="text" class="form-control" id="event_name" name="event_name" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="buy_in" class="form-label">バイイン ($)</label>
+                            <input type="number" class="form-control" id="buy_in" name="buy_in" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="prize" class="form-label">賞金 ($)</label>
+                            <input type="number" class="form-control" id="prize" name="prize" value="0" required>
+                        </div>
+                        <div class="col-12">
+                            <label for="memo" class="form-label">メモ</label>
+                            <input type="text" class="form-control" id="memo" name="memo">
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary">記録する</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <h2 class="mt-5">記録一覧</h2>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>日付</th>
+                        <th>イベント名</th>
+                        <th>バイイン</th>
+                        <th>賞金</th>
+                        <th>収支</th>
+                        <th>メモ</th>
+                        <th>操作</th> </tr>
+                </thead>
+                <tbody>
+                    {% for record in records %}
+                    <tr>
+                        <td>{{ record.日付 }}</td>
+                        <td>{{ record.イベント名 }}</td>
+                        <td>${{ "{:,}".format(record.バイイン | int(0)) }}</td>
+                        <td>${{ "{:,}".format(record.賞金 | int(0)) }}</td>
+                        <td class="{{ 'text-success' if (record.収支 | int(0)) > 0 else 'text-danger' }}">
+                            ${{ "{:,}".format(record.収支 | int(0)) }}
+                        </td>
+                        <td>{{ record.メモ }}</td>
+                        <td>
+                            <a href="{{ url_for('edit_page', row_id=record.row_num) }}" class="btn btn-sm btn-success">
+                                <i class="bi bi-pencil-square"></i> 編集
+                            </a>
+                            <form action="{{ url_for('delete_record', row_id=record.row_num) }}" method="post" style="display: inline;" onsubmit="return confirm('本当にこの記録を削除しますか？');">
+                                <button type="submit" class="btn btn-sm btn-danger">
+                                    <i class="bi bi-trash"></i> 削除
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <footer class="text-center text-muted py-4">
+            <p>Poker Journal App</p>
+        </footer>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
